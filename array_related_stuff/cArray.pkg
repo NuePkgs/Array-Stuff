@@ -1,0 +1,717 @@
+// Base class for complex arrays
+class ComplexArray {
+    let ActualArray = []
+    let Size = 0
+    let gSize = 0
+
+    void init(size) {
+        let i = 0
+        for (i = 0; i < size; i++) {
+            ActualArray[i] = "Empty"
+        }
+        gSize = size
+    }
+
+    void Puts() {
+        console.Println(ActualArray)
+    }
+
+    void Clear() {
+        ActualArray = []
+        gSize = 0
+    }
+
+    void ToStringArray() {
+        StringValue = ""
+
+        for (i = 0; i < gSize; i++) {
+            if (StringValue == "") {
+                StringValue = ActualArray[i]
+            } else {
+                StringValue = StringValue + " , " + ActualArray[i]
+            }
+        }
+
+        return str(StringValue)
+    }
+
+    void ToIntArray_unsafe() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            ArrayValue += int(ActualArray[i])
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ToFloatArray_unsafe() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            ArrayValue += float(ActualArray[i])
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ComplexToIntArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += int(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += int(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ComplexToFloatArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += float(ActualArray[i])
+            } elif type(ActualArray[i]) == type(12345) {
+                ArrayValue += float(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += float(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+
+    property this[index] {
+        get {
+            let tmp
+            if (index >= 0 && index < gSize) {
+                tmp = ActualArray[index]
+            } else {
+                tmp = "Index out of bounds"
+            }
+            return tmp
+        }
+        set {
+            if (index >= 0 && index < gSize) {
+                ActualArray[index] = value
+            }
+        }
+    }
+
+    void Append(value) {
+        ActualArray += (value)
+        gSize = len(ActualArray)
+    }
+
+    void RemoveAt(index) {
+        if (index >= 0 && index < gSize) {
+            let newArray = []
+            for (i = 0; i < gSize; i++) {
+                if (i != index) {
+                    newArray += (ActualArray[i])
+                }
+            }
+            ActualArray = newArray
+            gSize = len(ActualArray)
+        } else {
+            console.Println("Index out of bounds")
+        }
+    }
+
+    void InsertAt(index, value) {
+        if (index >= 0 && index <= gSize) {
+            let newArray = []
+            for (i = 0; i < index; i++) {
+                newArray += (ActualArray[i])
+            }
+            newArray += (value)
+            for (i = index; i < gSize; i++) {
+                newArray += (ActualArray[i])
+            }
+            ActualArray = newArray
+            gSize = len(ActualArray)
+        } else {
+            console.Println("Index out of bounds")
+        }
+    }
+
+    void Contains(value) {
+        for (i = 0; i < gSize; i++) {
+            if (ActualArray[i] == value) {
+                return true
+            }
+        }
+        return false
+    }
+
+    void IndexOf(value) {
+        for (i = 0; i < gSize; i++) {
+            if (ActualArray[i] == value) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    void Count() {
+        return gSize
+    }
+
+    void Splice(index, count, values...) {
+        if (index < 0 || index >= gSize) {
+            console.Println("Index out of bounds")
+            return
+        }
+
+        if (count > 0) {
+            let newArray = []
+            for (i = 0; i < gSize; i++) {
+                if (i < index || i >= index + count) {
+                    newArray += (ActualArray[i])
+                }
+            }
+            ActualArray = newArray
+        }
+
+        if (len(values) > 0) {
+            let newArray = []
+            for (i = 0; i < index; i++) {
+                newArray += (ActualArray[i])
+            }
+            for (i = 0; i < len(values); i++) {
+                newArray += (values[i])
+            }
+            for (i = index; i < gSize; i++) {
+                newArray += (ActualArray[i])
+            }
+            ActualArray = newArray
+        }
+
+        gSize = len(ActualArray)
+    }
+
+    // Utility methods
+    void ToSimpleArray() {
+        let simpleArray = []
+        for (i = 0; i < gSize; i++) {
+            simpleArray += (ActualArray[i])
+        }
+        return simpleArray
+    }
+}
+
+// Derived classes for different array types
+class StringArray : ComplexArray {
+    let gSize = 0
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = ""
+        }
+    }
+
+    void isNumeric(value) {
+        return type(value) == type(123)
+    }
+
+        void ToIntArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += int(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += int(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ToFloatArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += float(ActualArray[i])
+            } elif type(ActualArray[i]) == type(12345) {
+                ArrayValue += float(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += float(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+}
+
+class IntArray : ComplexArray {
+    let gSize = 0
+    let type = "INT"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = 0
+        }
+    }
+
+        void ToIntArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += int(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += int(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ToFloatArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += float(ActualArray[i])
+            } elif type(ActualArray[i]) == type(12345) {
+                ArrayValue += float(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += float(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+}
+
+class FloatArray : ComplexArray {
+    let gSize = 0
+    let type = "FLOAT"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = 0.0
+        }
+    }
+
+        void ToIntArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += int(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += int(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+
+    void ToFloatArray() {
+        ArrayValue = []
+
+        for (i = 0; i < gSize; i++) {
+            if type(ActualArray[i]) == type("string value") {
+                throw "ToIntArray_safe => Not Implemented for String Values!"
+            } elif type(ActualArray[i]) == type(12345.12345) {
+                ArrayValue += float(ActualArray[i])
+            } elif type(ActualArray[i]) == type(12345) {
+                ArrayValue += float(ActualArray[i])
+            } else {
+                try {
+                    ArrayValue += float(ActualArray[i])
+                } catch e {
+                    throw e
+                }
+            }
+        }
+
+        return array(ArrayValue)
+    }
+}
+
+class HashArray : ComplexArray {
+    let gSize = 0
+    let type = "HASH"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = {}
+        }
+    }
+}
+
+class ArrayArray : ComplexArray {
+    let gSize = 0
+    let type = "ARRAY"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = []
+        }
+    }
+}
+
+class TupleArray : ComplexArray {
+    let gSize = 0
+    let type = "TUPLE"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = ()
+        }
+    }
+}
+
+class MatrixArray : ComplexArray {
+    let type = "MATRIX"
+    void init(rows, cols) {
+        //super.init(rows)
+        for ( i = 0; i < rows; i++) {
+            ActualArray[i] = []
+            for ( j = 0; j < cols; j++) {
+                ActualArray[i][j] = 0
+            }
+        }
+        gSize = rows
+    }
+
+    void ToIntArray() {
+        let intMatrix = []
+        for (i = 0; i < gSize; i++) {
+            let row = []
+            for (j = 0; j < len(ActualArray[i]); j++) {
+                row += (int(ActualArray[i][j]))
+            }
+            intMatrix += (row)
+        }
+        return intMatrix
+    }
+
+    void ToFloatArray() {
+        let floatMatrix = []
+        for (i = 0; i < gSize; i++) {
+            let row = []
+            for (j = 0; j < len(ActualArray[i]); j++) {
+                row += (float(ActualArray[i][j]))
+            }
+            floatMatrix += (row)
+        }
+        return floatMatrix
+    }
+
+    void ToSimpleArray() {
+        return ToSimpleArray()
+    }
+}
+
+class Vector2 {
+    let x = 0
+    let y = 0
+
+    void init(a, b) {
+        x = a
+        y = b
+    }
+
+    void +(v) { // Overloading '+'
+        if (type(v) == "INTEGER") {
+            return new Vector2(x + v, y + v)
+        } elif v.is_a(Vector) {
+            return new Vector2(x + v.x, y + v.y)
+        }
+        return nil
+    }
+
+    void String() {
+        return console.Sprintf("(%v),(%v)", this.x, this.y)
+    }
+}
+
+class Vector3 {
+    let x = 0
+    let y = 0
+    let z = 0
+
+    void init(a, b, c) {
+        x = a
+        y = b
+        z = c
+    }
+
+    // Overloading '+' to handle addition of Vector3 or integer
+    void +(v) {
+        if (type(v) == "INTEGER") {
+            return new Vector3(x + v, y + v, z + v)
+        } elif v.is_a(Vector3) {
+            return new Vector3(x + v.x, y + v.y, z + v.z)
+        }
+        return nil
+    }
+
+    // Method to represent the vector as a string
+    void String() {
+        return console.Sprintf("(%v, %v, %v)", this.x, this.y, this.z)
+    }
+}
+
+class Vector2Array : ComplexArray {
+    let gSize = 0
+    let type = "VECTOR2"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = new Vector2(0, 0)
+        }
+    }
+
+    void ToSimpleArray() {
+        throw "ComplexArray::Vector2Array::ToSimpleArray() => Not Implemented"
+    }
+}
+
+class Vector3Array : ComplexArray {
+    // Initialize the array with Vector3 objects
+    let gSize = 0
+    let TrueSize = 0
+    let type = "VECTOR3"
+    void init(size) {
+        //super.init(size)
+        for ( i = 0; i < gSize; i++) {
+            ActualArray[i] = new Vector3(0, 0, 0) // Adjusted to Vector3 with 3 dimensions
+        }
+        gSize = size
+        this.gSize = size
+        TrueSize = size
+    }
+
+    // Convert the array of Vector3 to a simple array of strings
+    void ToSimpleArray() {
+        throw "ComplexArray::Vector3Array::ToSimpleArray() => Not Implemented"
+    }
+
+    // Additional conversion methods
+    void ToIntArray() {
+        let intArray = []
+        for ( i = 0; i < gSize; i++) {
+            intArray += (ActualArray[i].x) // Convert to array of integers (x component)
+        }
+        return intArray
+    }
+
+    void ToFloatArray() {
+        let floatArray = []
+        for ( i = 0; i < gSize; i++) {
+            floatArray += (ActualArray[i].x * 1.0) // Convert to array of floats (x component)
+        }
+        return floatArray
+    }
+
+    // Add other conversion methods if necessary
+}
+
+// Factory functions for creating instances of the array classes
+
+// Creates a new StringArray
+void NewStringArray(size) {
+    return new StringArray(size)
+}
+
+// Creates a new IntArray
+void NewIntArray(size) {
+    return new IntArray(size)
+}
+
+// Creates a new FloatArray
+void NewFloatArray(size) {
+    return new FloatArray(size)
+}
+
+// Creates a new HashArray
+void NewHashArray(size) {
+    return new HashArray(size)
+}
+
+// Creates a new ArrayArray
+void NewArrayArray(size) {
+    return new ArrayArray(size)
+}
+
+// Creates a new TupleArray
+void NewTupleArray(size) {
+    return new TupleArray(size)
+}
+
+// Creates a new MatrixArray with given rows and columns
+void NewMatrixArray(rows, cols) {
+    return new MatrixArray(rows, cols)
+}
+
+// Creates a new Vector2Array
+void NewVector2Array(size) {
+    return new Vector2Array(size)
+}
+
+// Creates a new Vector3Array
+void NewVector3Array(size) {
+    return new Vector3Array(size)
+}
+
+
+void ExampleUsage() {
+    // Example for StringArray
+    let stringArray = NewStringArray(5)
+    stringArray[0] = "10"
+    stringArray[1] = "20.5"
+    stringArray[2] = "hello"
+    stringArray[3] = "30"
+    stringArray[4] = "40.7"
+
+    console.Println("StringArray:", stringArray.Puts())
+    console.Println("StringArray to IntArray:", stringArray.ToIntArray())
+    console.Println("StringArray to FloatArray:", stringArray.ToFloatArray())
+
+    // Example for IntArray
+    let intArray = NewIntArray(3)
+    intArray[0] = 1
+    intArray[1] = 2
+    intArray[2] = 3
+
+    console.Println("IntArray:", intArray.Puts())
+    console.Println("IntArray to StringArray:", intArray.ToStringArray())
+    console.Println("IntArray to FloatArray:", intArray.ToFloatArray())
+
+
+    # console.Println(intArray.ToStringArray())
+
+    // Example for FloatArray
+    let floatArray = NewFloatArray(4)
+    floatArray[0] = 1.5
+    floatArray[1] = 2.5
+    floatArray[2] = 3.5
+    floatArray[3] = 4.5
+
+    console.Println("FloatArray:", floatArray.Puts())
+    console.Println("FloatArray to StringArray:", floatArray.ToStringArray())
+    console.Println("FloatArray to IntArray:", floatArray.ToIntArray())
+
+    // Example for HashArray
+    let hashArray = NewHashArray(2)
+    hashArray[0] = {"key1": "value1"}
+    hashArray[1] = {"key2": "value2"}
+
+    console.Println("HashArray:", hashArray.Puts())
+
+    // Example for ArrayArray
+    let arrayArray = NewArrayArray(3)
+    arrayArray[0] = [1, 2]
+    arrayArray[1] = [3, 4]
+    arrayArray[2] = [5, 6]
+
+    console.Println("ArrayArray:", arrayArray.Puts())
+
+    // Example for TupleArray
+    let tupleArray = NewTupleArray(3)
+    tupleArray[0] = (1, "a")
+    tupleArray[1] = (2, "b")
+    tupleArray[2] = (3, "c")
+
+    console.Println("TupleArray:", tupleArray.Puts())
+
+    // Example for MatrixArray
+    let matrixArray = NewMatrixArray(2, 3)
+    matrixArray[0][0] = 1
+    matrixArray[0][1] = 2
+    matrixArray[0][2] = 3
+    matrixArray[1][0] = 4
+    matrixArray[1][1] = 5
+    matrixArray[1][2] = 6
+
+    console.Println("MatrixArray:", matrixArray.Puts())
+    console.Println("MatrixArray to IntArray:", matrixArray.ToIntArray())
+    console.Println("MatrixArray to FloatArray:", matrixArray.ToFloatArray())
+
+    // Example for Vector2Array
+    let vector2Array = NewVector2Array(2)
+    vector2Array[0] = new Vector2(1, 2)
+    vector2Array[1] = new Vector2(3, 4)
+
+    console.Println("Vector2Array:", vector2Array.Puts())
+    console.Println("Vector2Array to SimpleArray:", vector2Array.ToSimpleArray())
+
+    // Example for Vector3Array
+    let vector3Array = NewVector3Array(2)
+    vector3Array[0] = new Vector3(1, 2, 3)
+    vector3Array[1] = new Vector3(4, 5, 6)
+
+    console.Println("Vector3Array:", vector3Array.Puts())
+    console.Println("Vector3Array to SimpleArray:", vector3Array.ToSimpleArray())
+    console.Println("Vector3Array to IntArray:", vector3Array.ToIntArray())
+    console.Println("Vector3Array to FloatArray:", vector3Array.ToFloatArray())
+
+    // Example usage of Vector2 and Vector3 classes
+    let vector2 = new Vector2(1, 2)
+    let vector3 = new Vector3(3, 4, 5)
+    console.Println("Vector2:", vector2.String())
+    console.Println("Vector3:", vector3.String())
+
+    let sumVector2 = vector2 + 5
+    let sumVector3 = vector3 + 10
+    console.Println("Vector2 + 5:", sumVector2.String())
+    console.Println("Vector3 + 10:", sumVector3.String())
+
+    let vector2FromVector3 = vector3 + vector2
+    console.Println("Vector3 + Vector2:", vector2FromVector3.String())
+}
+
+## NEEDS A FIX
+//ExampleUsage();

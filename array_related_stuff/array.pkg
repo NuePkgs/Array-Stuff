@@ -1,0 +1,242 @@
+class Array
+{
+    let ActualArray = []
+    let Size = 0
+
+    void init(size)
+    {
+        let i = 0
+        for (i = 0; i < size; i++)
+        {
+            ActualArray[i] = "Empty"
+        }
+        this.Size = size
+    }
+
+    void Puts() {
+        println(ActualArray)
+    }
+
+    void Clear() {
+        ActualArray = []
+        this.Size = 0
+    }
+
+    void ToString() {
+        StringValue = ""
+
+        for (i = 0; i < this.Size; i++) {
+            if (StringValue == "") {
+                StringValue = ActualArray[i]
+            } else {
+                StringValue = StringValue + " , " + ActualArray[i]
+            }
+        }
+
+        return str(StringValue)
+    }
+
+    property this[index] // index must be a property
+    {
+        get
+        {
+            let tmp
+            if (index >= 0 && index < this.Size)
+            {
+                tmp = ActualArray[index]
+            }
+            else
+            {
+                tmp = "Index out of bounds"
+            }
+            return tmp
+        }
+        set
+        {
+            if (index >= 0 && index < this.Size)
+            {
+                ActualArray[index] = value
+            }
+        }
+    }
+
+    void Append(value) {
+        ActualArray.push(value)
+        this.Size = len(ActualArray)
+    }
+
+    void RemoveAt(index) {
+        if (index >= 0 && index < this.Size) {
+            // Remove element at index
+            let newArray = []
+            for (i = 0; i < this.Size; i++) {
+                if (i != index) {
+                    newArray.push(ActualArray[i])
+                }
+            }
+            ActualArray = newArray
+            this.Size = len(ActualArray)
+        } else {
+            println("Index out of bounds")
+        }
+    }
+
+    void InsertAt(index, value) {
+        if (index >= 0 && index <= this.Size) {
+            let newArray = []
+            for (i = 0; i < index; i++) {
+                newArray.push(ActualArray[i])
+            }
+            newArray.push(value)
+            for (i = index; i < this.Size; i++) {
+                newArray.push(ActualArray[i])
+            }
+            ActualArray = newArray
+            this.Size = len(ActualArray)
+        } else {
+            println("Index out of bounds")
+        }
+    }
+
+    void Contains(value) {
+        for (i = 0; i < this.Size; i++) {
+            if (ActualArray[i] == value) {
+                return true
+            }
+        }
+        return false
+    }
+
+    void IndexOf(value) {
+        for (i = 0; i < this.Size; i++) {
+            if (ActualArray[i] == value) {
+                return i
+            }
+        }
+        return -1 // Element not found
+    }
+
+    void Count() {
+        return this.Size
+    }
+
+    void Count_not_empty() {
+        let count = 0
+        for (i = 0; i < this.Size; i++) {
+            if (ActualArray[i] != "Empty") {
+                count++
+            }
+        }
+        return count
+    }
+
+    void ToInt() {
+        let intArray = []
+        for (i = 0; i < this.Size; i++) {
+            let value = ActualArray[i]
+            if (isNumeric(value)) {
+                intArray.push(toInt(value))
+            } else {
+                println("Value at index", i, "is not numeric and cannot be converted to int.")
+            }
+        }
+        return intArray
+    }
+
+    void ToFloat() {
+        let floatArray = []
+        for (i = 0; i < this.Size; i++) {
+            let value = ActualArray[i]
+            if (isNumeric(value)) {
+                floatArray.push(float(value))
+            } else {
+                println("Value at index", i, "is not numeric and cannot be converted to float.")
+            }
+        }
+        return floatArray
+    }
+
+    void isNumeric(value) {
+        return type(value) == type(453)
+    }
+
+    void Splice(index, count, values...) {
+        if (index < 0 || index >= this.Size) {
+            println("Index out of bounds")
+            return
+        }
+
+        // Remove elements
+        if (count > 0) {
+            let newArray = []
+            for (i = 0; i < this.Size; i++) {
+                if (i < index || i >= index + count) {
+                    newArray.push(ActualArray[i])
+                }
+            }
+            ActualArray = newArray
+        }
+
+        // Add new elements
+        if (len(values) > 0) {
+            let newArray = []
+            for (i = 0; i < index; i++) {
+                newArray.push(ActualArray[i])
+            }
+            for (i = 0; i < len(values); i++) {
+                newArray.push(values[i])
+            }
+            for (i = index; i < this.Size; i++) {
+                newArray.push(ActualArray[i])
+            }
+            ActualArray = newArray
+        }
+
+        this.Size = len(ActualArray)
+    }
+}
+
+void ExampleUsage() {
+    namesObj = new Array(size=7)
+    
+    // Setting elements
+    namesObj[0] = "Zara"
+    namesObj[1] = "Riz"
+    namesObj[2] = "Nuha"
+    namesObj[3] = "Asif"
+    namesObj[4] = "Davinder"
+    namesObj[5] = "Sunil"
+    namesObj[6] = "Rubic"
+    
+    namesObj.Puts()
+
+    // Getting elements
+    for (i = 0; i < namesObj.Size; i++)
+    {
+        println(namesObj[i])
+    }
+
+    // Additional operations
+    namesObj.Append("NewName")
+    namesObj.RemoveAt(2)
+    namesObj.InsertAt(1, "InsertedName")
+    namesObj.Splice(3, 2, "SplicedName1", "SplicedName2") // Using splice
+
+    println("Contains 'Sunil':", namesObj.Contains("Sunil"))
+    println("Index of 'Asif':", namesObj.IndexOf("Asif"))
+    println("Count:", namesObj.Count())
+    println("Count (not empty):", namesObj.Count_not_empty())
+
+    // Example of converting to integer and float arrays
+    namesObj.Append(123)
+    namesObj.Append(456.78)
+    namesObj.Append("abc")
+    
+    println("ToInt:", namesObj.ToInt())
+    println("ToFloat:", namesObj.ToFloat())
+
+    console.Println(namesObj.ToString())
+    console.Println(type(namesObj.ToString()))
+}
+
+//ExampleUsage()
